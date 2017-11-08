@@ -9,6 +9,8 @@ var snakeSize = 20;
 var cvsGridX = canvas.width / snakeSize;
 var cvsGridY = canvas.height / snakeSize;
 var dire = -2;
+var score = 0;
+var timer;
 //增加蛇节点
 function createSnakeNode(x, y) {
   snakeBody.push({
@@ -112,6 +114,7 @@ function isGetFood(node){
   if(node.x === food.x && node.y === food.y){
     setFood();
     createSnakeNode(snakeBody[snakeBody.length-1].x,snakeBody[snakeBody.length-1].y);
+    score ++;
   }
 }
 
@@ -120,7 +123,11 @@ function isOutOfBorder(node){
 }
 
 function gameOver(){
-  alert("gameOver");
+  alert("gameOver"+"\nYour:score:"+score+"\nThe best score = "+localStorage.getItem("score"));
+  if(score>localStorage.getItem("score")){
+    localStorage.setItem("score", score);
+  }
+  clearTimeout(timer);
 }
 
 
@@ -140,10 +147,12 @@ function setFood(){
 function init() {
   createSnake();
   snakeMove();
-
+  if(!localStorage.getItem("score")){
+    localStorage.setItem("score",0)
+  };
 }
 
 init();
-setInterval(function(){
+timer = setInterval(function(){
   snakeMove()
 },300);
